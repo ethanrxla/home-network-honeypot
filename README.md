@@ -1,11 +1,17 @@
 # Home Network Honeypot Collector
 
-A small collector for home-lab network monitoring: polls your router for
-connected clients, tags devices by network segment (main wifi / guest wifi /
-wired), and ships snapshots to a dashboard so you can watch what joins your
-guest network. Point the guest SSID's password at something weak/public
-("Free WiFi", etc.) and it doubles as a low-effort honeypot — anything that
-shows up there is worth a look.
+Two honeypot layers for a home lab, both optional and independent:
+
+- **Network/wifi layer** (`collector/`) — polls your router for connected
+  clients, tags devices by network segment (main wifi / guest wifi / wired),
+  and ships snapshots to a dashboard. Point the guest SSID's password at
+  something weak/public ("Free WiFi", etc.) and anything that joins is worth
+  a look.
+- **SSH layer** (`cowrie/`) — an overlay on top of [Cowrie](https://github.com/cowrie/cowrie)
+  that replaces its static command emulation with a tiered dispatcher
+  (static lookup → stateful shell emulation → LLM escalation for anything
+  unhandled), plus fake bait files for attackers to find. See
+  `cowrie/README.md`.
 
 Built against a TP-Link router via [tplinkrouterc6u](https://github.com/AlexandrErohin/TP-Link-Archer-C6U),
 which supports a range of TP-Link Archer/Deco models. If your router isn't
@@ -58,3 +64,10 @@ your router's isolation settings are actually on.
 
 This is meant for your own network that you administer. Don't point it at a
 network you don't own or don't have permission to monitor.
+
+## SSH honeypot (`cowrie/`)
+
+See [`cowrie/README.md`](cowrie/README.md) for setup. `cowrie/etc/cowrie.cfg`
+in this repo has a placeholder `[output_discord]` webhook URL — replace it
+with your own before deploying, or comment the section out to skip Discord
+alerts entirely.
