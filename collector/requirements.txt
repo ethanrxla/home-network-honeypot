@@ -1,0 +1,4 @@
+requests
+python-dotenv
+mac-vendor-lookup
+tplinkrouterc6u
